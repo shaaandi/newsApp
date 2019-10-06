@@ -29,6 +29,7 @@ module.exports = {
   },
   deleteArticle: async ({ id }, req) => {
     let query = await Article.findByIdAndDelete(id);
+    //  needed to delete the reference of teh article and its related all comments and likes;
     return query;
   }
 };

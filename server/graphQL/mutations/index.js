@@ -4,6 +4,10 @@ const { GraphQLObjectType } = graphql;
 
 const { setUserBadge, logout } = require("./auth");
 const { createArticle, updateArticle, deleteArticle } = require("./article");
+const { updateAuthor } = require("./author");
+const { updateReader } = require("./reader");
+const { createComment, deleteComment } = require("./comment");
+const { likeArticle } = require("./like");
 const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -11,7 +15,12 @@ const mutation = new GraphQLObjectType({
     logout,
     createArticle,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    updateAuthor,
+    updateReader,
+    createComment,
+    deleteComment,
+    likeArticle
   }
 });
 

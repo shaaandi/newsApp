@@ -33,7 +33,7 @@ const ArticleType = new GraphQLObjectType({
     },
     comments: {
       type: new GraphQLList(CommentType),
-      resolve(parentValue, args, req) {
+      resolve(parentVal, args, req) {
         return Article.getComments(parentVal.id);
       }
     },
