@@ -239,5 +239,10 @@ const RootQueryType = new GraphQLObjectType({
 
 module.exports = {
   RootQueryType,
-  CurrentUserType
+  CurrentUserType,
+  ArticleType,
+  ReaderType,
+  AuthorType,
+  CommentType,
+  LikeType
 };

@@ -10,18 +10,24 @@ const authorSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
-  articles: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "articles"
-  },
-  comments: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "comments"
-  },
-  likes: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "likes"
-  },
+  articles: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "articles"
+    }
+  ],
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "comments"
+    }
+  ],
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "likes"
+    }
+  ],
 
   // Auth Section props
   badge: {

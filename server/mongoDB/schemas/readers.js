@@ -9,14 +9,18 @@ const readerSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
-  comments: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "comments"
-  },
-  likes: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "likes"
-  },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "comments"
+    }
+  ],
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "likes"
+    }
+  ],
 
   // Auth Section
   initialized: {

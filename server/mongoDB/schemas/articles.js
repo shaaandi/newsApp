@@ -21,10 +21,12 @@ const articleSchema = new mongoose.Schema({
       ref: "comments"
     }
   ],
-  likes: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "likes"
-  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "likes"
+    }
+  ],
   //  Enum categories will be defined so that the user can only choose from that.
   category: String
   //  We will add the hashtag functionality later.

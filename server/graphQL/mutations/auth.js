@@ -2,7 +2,12 @@ const graphql = require("graphql");
 const { setUserBadge } = require("../../dbResources/auth/index");
 const { CurrentUserType } = require("../schemas/rootQuery");
 
-const { GraphQLString, GraphQLNonNull } = graphql;
+const {
+  GraphQLString,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLError
+} = graphql;
 
 module.exports = {
   setUserBadge: {
