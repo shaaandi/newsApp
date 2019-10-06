@@ -1,8 +1,9 @@
+require("./schemas/comments");
+require("./schemas/likes");
 require("./schemas/articles");
 require("./schemas/authors");
 require("./schemas/readers");
-require("./schemas/comments");
-require("./schemas/likes");
+
 const keys = require("../keys/dev");
 const mongoose = require("mongoose");
 

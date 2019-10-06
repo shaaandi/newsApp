@@ -12,11 +12,12 @@ module.exports = {
       return false;
     }
     let user;
-    const badge = body.badge;
+    const { badge, username } = body;
     if (badge === "READER") {
       user = await new Reader({
         googleId: req.user.id,
-        badge: badge,
+        badge,
+        username,
         initialized: true
       }).save();
       if (user) {
@@ -33,7 +34,8 @@ module.exports = {
     } else if (badge === "AUTHOR") {
       user = await new Author({
         googleId: req.user.id,
-        badge: badge,
+        badge,
+        username,
         initialized: true
       }).save();
       if (user) {

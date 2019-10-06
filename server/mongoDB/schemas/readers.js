@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Comment = mongoose.model("comments");
+const Like = mongoose.model("likes");
 
 const readerSchema = new mongoose.Schema({
   //  We will add the fName, lName,  mName , functionality later
@@ -33,5 +35,19 @@ const readerSchema = new mongoose.Schema({
   //  ***************
   // WE WILL ADD THE VIEW FUNCTIONALITY LATER ;
 });
+
+readerSchema.statics.get = async function(id) {
+  let reader = await this.findById(id);
+  return reader;
+};
+
+readerSchema.statics.getComments = async function(id) {
+  let comments = await Comment.find({ readerId: id }).populate("articleId");
+  return comments;
+};
+readerSchema.statics.getLikes = async function(id) {
+  let likes = await Like.find({ readerId: id }).populate("articleId");
+  return likes;
+};
 
 module.exports = mongoose.model("readers", readerSchema);

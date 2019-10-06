@@ -15,7 +15,7 @@
 //   fields: () => ({
 //     title: { type: GraphQLString },
 //     content: { type: GraphQLString },
-//     author: {
+//     authorId: {
 //       type: AuthorType,
 //       resolve(parentValue, args, req) {
 //         // finding the author of the article and return it

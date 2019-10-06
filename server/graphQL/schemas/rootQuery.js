@@ -1,4 +1,9 @@
 const graphql = require("graphql");
+const mongoose = require("mongoose");
+
+const Article = mongoose.model("articles");
+const Reader = mongoose.model("readers");
+const Author = mongoose.model("authors");
 
 const {
   GraphQLObjectType,
@@ -13,12 +18,13 @@ const {
 const ArticleType = new GraphQLObjectType({
   name: "ArticleType",
   fields: () => ({
+    id: { type: GraphQLID },
     title: { type: GraphQLString },
     content: { type: GraphQLString },
-    author: {
+    authorId: {
       type: AuthorType,
-      resolve(parentValue, args, req) {
-        // finding the author of the article and return it
+      resolve(parentVal, args, req) {
+        return Article.getAuthor(parentVal.id);
       }
     },
     createdAt: {
@@ -28,13 +34,13 @@ const ArticleType = new GraphQLObjectType({
     comments: {
       type: new GraphQLList(CommentType),
       resolve(parentValue, args, req) {
-        //  resolve the request by populating the comments
+        return Article.getComments(parentVal.id);
       }
     },
     likes: {
       type: new GraphQLList(LikeType),
       resolve(parentValue, args, req) {
-        // resolve by populating the likes of the articles
+        return Article.getLikes(parentVal.id);
       }
     },
     category: { type: GraphQLString }
@@ -44,27 +50,30 @@ const ArticleType = new GraphQLObjectType({
 const AuthorType = new GraphQLObjectType({
   name: "AuthorType",
   fields: () => ({
+    id: { type: GraphQLID },
+    googleId: { type: GraphQLString },
+    badge: { type: GraphQLString },
+    initialized: { type: GraphQLBoolean },
     name: { type: GraphQLString },
     username: { type: GraphQLString },
     articles: {
       // adding article type in the GraphQLList function
       type: new GraphQLList(ArticleType),
       resolve(parentVal, args, req) {
-        //  handling the requested query,
-        // populating the articles section of the user
+        return Author.getArticles(parentVal.id);
       }
     },
     comments: {
       // adding comments type in the following function
       type: new GraphQLList(CommentType),
       resolve(parentVal, args, req) {
-        // resolving the comments by populating them .
+        return Author.getComments(parentVal.id);
       }
     },
     likes: {
       type: new GraphQLList(LikeType),
       resolve(parentVal, args, req) {
-        // resolving the query by populating the likes prop
+        return Author.getLikes(parentVal.id);
       }
     }
   })
@@ -73,7 +82,8 @@ const AuthorType = new GraphQLObjectType({
 const CommentType = new GraphQLObjectType({
   name: "CommentType",
   fields: () => ({
-    readersId: {
+    id: { type: GraphQLID },
+    readerId: {
       type: ReaderType,
       resolve(parentVal, args, req) {
         //  resolving the query by polulating the reader
@@ -92,6 +102,12 @@ const CommentType = new GraphQLObjectType({
     createdAt: {
       //  Time Stamps will be set later in the graphQL, and the backened mongoose backend
       type: GraphQLString
+    },
+    authorId: {
+      type: AuthorType,
+      resolve(parentVal, args, req) {
+        // resolving by returning the author
+      }
     }
   })
 });
@@ -99,6 +115,7 @@ const CommentType = new GraphQLObjectType({
 const LikeType = new GraphQLObjectType({
   name: "LikeType",
   fields: () => ({
+    id: { type: GraphQLID },
     readerId: {
       type: ReaderType,
       resolve(parentVal, args, req) {
@@ -108,11 +125,17 @@ const LikeType = new GraphQLObjectType({
     articleId: {
       type: ArticleType,
       resolve(parentVal, args, req) {
-        // resolve by finding the article and returning it
+        // resolve by finding the author and returning it
       }
     },
     createdAt: {
       type: GraphQLString
+    },
+    authorId: {
+      type: AuthorType,
+      resolve(parentVal, args, req) {
+        // resolve by findng the author and returning it
+      }
     }
   })
 });
@@ -120,18 +143,24 @@ const LikeType = new GraphQLObjectType({
 const ReaderType = new GraphQLObjectType({
   name: "ReaderType",
   fields: () => ({
+    id: { type: GraphQLID },
+    googleId: { type: GraphQLString },
+    badge: { type: GraphQLString },
+    initialized: { type: GraphQLBoolean },
     name: { type: GraphQLString },
     username: { type: GraphQLString },
     likes: {
       type: new GraphQLList(LikeType),
       resolve(parentVal, args, req) {
         //  resolving the query by populating all the likes
+        return Reader.getLikes(parentVal.id);
       }
     },
     comments: {
       type: new GraphQLList(CommentType),
       resolve(parentVal, args, req) {
         //  populating the comments of the readers
+        return Reader.getComments(parentVal.id);
       }
     }
 
@@ -172,6 +201,7 @@ const RootQueryType = new GraphQLObjectType({
       },
       resolve(parentVal, args, req) {
         // finding the correct reader and returning it.
+        return Reader.get(args.id);
       }
     },
     author: {
@@ -181,6 +211,7 @@ const RootQueryType = new GraphQLObjectType({
       },
       resolve(parentVal, args, req) {
         //  resolving the author query
+        return Author.get(args.id);
       }
     },
 
@@ -191,6 +222,7 @@ const RootQueryType = new GraphQLObjectType({
       },
       resolve(parentVal, args, req) {
         //  finding the correct the article.
+        return Article.get(args.id);
       }
     },
     comment: {

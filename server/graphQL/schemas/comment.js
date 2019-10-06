@@ -14,7 +14,7 @@
 // const CommentType = new GraphQLObjectType({
 //   name: "CommentType",
 //   fields: () => ({
-//     readersId: {
+//     readerId: {
 //       type: ReaderType,
 //       resolve(parentVal, args, req) {
 //         //  resolving the query by polulating the reader

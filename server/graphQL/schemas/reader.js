@@ -24,7 +24,7 @@
 //       type: new GraphQLList(CommentType),
 //       resolve(parentVal, args, req) {
 //         //  populating the comments of the readers
-//       }~
+//       }
 //     }
 
 //     //  We will add the view finctionality later,

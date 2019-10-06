@@ -5,6 +5,10 @@ const likeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "readers"
   },
+  authorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "authors"
+  },
   articleId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "articles"
