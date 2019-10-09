@@ -7,7 +7,7 @@ require("./schemas/contentManagers");
 require("./schemas/appTemplates/mainPage");
 require("./schemas/appTemplates/categoryPages");
 
-const keys = require("../keys/dev");
+const keys = require("../keys");
 const mongoose = require("mongoose");
 
 mongoose.Promise = global.Promise;

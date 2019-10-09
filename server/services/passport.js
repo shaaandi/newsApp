@@ -2,7 +2,7 @@ const passport = require("passport");
 const mongoose = require("mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const LocalStrategy = require("passport-local").Strategy;
-const keys = require("../keys/dev.js");
+const keys = require("../keys");
 
 // Requiring all three types of users we have yet.
 const Author = mongoose.model("authors");
