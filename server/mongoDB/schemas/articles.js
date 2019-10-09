@@ -5,6 +5,7 @@ const Like = mongoose.model("likes");
 const articleSchema = new mongoose.Schema(
   {
     title: String,
+    // later scaling will include the multiple images in the content and links facility,
     content: String,
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -25,7 +26,18 @@ const articleSchema = new mongoose.Schema(
       }
     ],
     //  Enum categories will be defined so that the user can only choose from that.
-    category: String
+    category: {
+      type: String,
+      enum: [
+        "International",
+        "US",
+        "Politics",
+        "Health",
+        "Technology",
+        "Sports",
+        "Opinion"
+      ]
+    }
     //  We will add the hashtag functionality later.
     // We will add views functionality later .
   },

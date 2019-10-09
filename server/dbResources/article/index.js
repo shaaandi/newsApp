@@ -1,12 +1,8 @@
 const mongoose = require("mongoose");
 
 const Article = mongoose.model("articles");
-const Author = mongoose.model("authors");
 module.exports = {
   createArticle: async ({ title, content, category }, req) => {
-    // title: { type: new GraphQLNonNull(GraphQLString) },
-    // content: { type: new GraphQLNonNull(GraphQLString) },
-    // authorId: { type: new GraphQLNonNull(GraphQLString) }
     let authorId = req.user.id;
     const article = await new Article({ title, content, authorId, category });
     //  the req.user have the author object from mongoose;
