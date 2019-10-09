@@ -2,12 +2,14 @@ const graphql = require("graphql");
 
 const { GraphQLObjectType } = graphql;
 
-const { setUserBadge, logout } = require("./auth");
+const { setUserBadge, logout, login, signup } = require("./auth");
 const { createArticle, updateArticle, deleteArticle } = require("./article");
 const { updateAuthor } = require("./author");
 const { updateReader } = require("./reader");
 const { createComment, deleteComment } = require("./comment");
-const { likeArticle } = require("./like");
+const { likeArticle, unLikeArticle } = require("./like");
+const { templetesInitialize } = require("./initialize");
+const { setMainSection, setCategorySection } = require("./templete");
 const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -20,7 +22,13 @@ const mutation = new GraphQLObjectType({
     updateReader,
     createComment,
     deleteComment,
-    likeArticle
+    likeArticle,
+    unLikeArticle,
+    login,
+    signup,
+    templetesInitialize,
+    setMainSection,
+    setCategorySection
   }
 });
 

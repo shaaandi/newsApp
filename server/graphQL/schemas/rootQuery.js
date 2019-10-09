@@ -4,14 +4,47 @@ const mongoose = require("mongoose");
 const Article = mongoose.model("articles");
 const Reader = mongoose.model("readers");
 const Author = mongoose.model("authors");
+const Like = mongoose.model("likes");
+const MainPage = mongoose.model("mainPage");
+const CategoryPage = mongoose.model("categoryPages");
 
 const {
   GraphQLObjectType,
   GraphQLID,
   GraphQLString,
   GraphQLList,
-  GraphQLBoolean
+  GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLNonNull,
+  GraphQLEnumType
 } = graphql;
+
+//  Enum types defintiion  :
+
+const fetchCategoryNameEnum = new GraphQLEnumType({
+  name: "fetchCategoryNameEnum",
+  values: {
+    International: { value: "International" },
+    US: { value: "US" },
+    Politics: { value: "Politics" },
+    Health: { value: "Health" },
+    Technology: { value: "Technology" },
+    Sports: { value: "Sports" },
+    Opinion: { value: "Opinion" }
+  }
+});
+
+//  *********************
+
+// Input Types :
+const fetchCategoryTempleteInputType = new GraphQLInputObjectType({
+  name: "fetchCategoryTempleteInputType",
+  fields: {
+    name: { type: new GraphQLNonNull(fetchCategoryNameEnum) }
+  }
+});
+
+//  ***********
 
 //  Demo Query Files
 
@@ -39,7 +72,7 @@ const ArticleType = new GraphQLObjectType({
     },
     likes: {
       type: new GraphQLList(LikeType),
-      resolve(parentValue, args, req) {
+      resolve(parentVal, args, req) {
         return Article.getLikes(parentVal.id);
       }
     },
@@ -119,13 +152,14 @@ const LikeType = new GraphQLObjectType({
     readerId: {
       type: ReaderType,
       resolve(parentVal, args, req) {
-        //   resolve by finding the reader and returning back
+        return Like.getReader(parentVal.id);
       }
     },
     articleId: {
       type: ArticleType,
       resolve(parentVal, args, req) {
         // resolve by finding the author and returning it
+        return Like.getArticle(parentVal.id);
       }
     },
     createdAt: {
@@ -135,6 +169,7 @@ const LikeType = new GraphQLObjectType({
       type: AuthorType,
       resolve(parentVal, args, req) {
         // resolve by findng the author and returning it
+        return Like.getAuthor(parentVal.id);
       }
     }
   })
@@ -182,6 +217,84 @@ const CurrentUserType = new GraphQLObjectType({
     }
   })
 });
+
+// Defining browser templetes types ;
+const MainPageType = new GraphQLObjectType({
+  name: "MainPage",
+  fields: () => ({
+    headline1: {
+      type: ArticleType,
+      resolve(parentVal, args, req) {
+        //  resolving the MainPage and returning the headline 1 article;
+        return Article.get(parentVal.headline1);
+      }
+    },
+    headline2: {
+      type: ArticleType,
+      resolve(parentVal, args, req) {
+        //  resolving the MainPage and returning the headline 1 article;
+        return Article.get(parentVal.headline2);
+      }
+    },
+    headline3: {
+      type: ArticleType,
+      resolve(parentVal, args, req) {
+        //  resolving the MainPage and returning the headline 1 article;
+        return Article.get(parentVal.headline3);
+      }
+    },
+    headline4: {
+      type: ArticleType,
+      resolve(parentVal, args, req) {
+        //  resolving the MainPage and returning the headline 1 article;
+        return Article.get(parentVal.headline4);
+      }
+    },
+    headline5: {
+      type: ArticleType,
+      resolve(parentVal, args, req) {
+        //  resolving the MainPage and returning the headline 1 article;
+        return Article.get(parentVal.headline5);
+      }
+    },
+    editorsPick: {
+      type: new GraphQLList(ArticleType),
+      resolve(parentVal, args, req) {
+        //  resolve by returning the editors Pick opinion-articles ;
+        return parentVal.editorsPick.map(articleId => Article.get(articleId));
+      }
+    }
+  })
+});
+
+const CategoryPageType = new GraphQLObjectType({
+  name: "CategoryPageType",
+  fields: () => ({
+    headline1: {
+      type: ArticleType,
+      resolve(parentVal, args, req) {
+        // resolve by returning the article ;
+        return Article.get(parentVal.headline1);
+      }
+    },
+    headline2: {
+      type: ArticleType,
+      resolve(parentVal, args, req) {
+        // resolve by returning the article ;
+        return Article.get(parentVal.headline2);
+      }
+    },
+    headline3: {
+      type: ArticleType,
+      resolve(parentVal, args, req) {
+        // resolve by returning the article ;
+        return Article.get(parentVal.headline3);
+      }
+    }
+  })
+});
+
+// *****************************
 
 // **********************
 
@@ -233,7 +346,26 @@ const RootQueryType = new GraphQLObjectType({
       resolve(parentVal, args, req) {
         //  finding the comment
       }
+    },
+
+    // seperate queries section for the run time of the browser ,
+    // including fetching the templetes;
+    fetchMainTemplete: {
+      type: MainPageType,
+      resolve(parentVal, args, req) {
+        return MainPage.findOne({});
+      }
+    },
+    fetchCategoryTemplete: {
+      type: CategoryPageType,
+      args: {
+        input: { type: fetchCategoryTempleteInputType }
+      },
+      resolve(parentVal, { input }, req) {
+        return CategoryPage.findOne({ name: input.name });
+      }
     }
+    // *******************************************
   })
 });
 
@@ -244,5 +376,7 @@ module.exports = {
   ReaderType,
   AuthorType,
   CommentType,
-  LikeType
+  LikeType,
+  MainPageType,
+  CategoryPageType
 };

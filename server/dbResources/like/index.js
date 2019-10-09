@@ -29,5 +29,26 @@ module.exports = {
     await article.save();
     return like;
   },
-  unLikeArticle: async ({ articleId }, req) => {}
+  unLikeArticle: async ({ articleId }, req) => {
+    let userId = req.user.badge.toLowerCase().concat("Id");
+    let article = await Article.findById(articleId);
+    let user = req.user;
+    let like = await Like.findOne({ articleId, [userId]: user.id });
+    let filteredArticleLikes = article.likes.filter(likeId => {
+      if (like.equals(likeId)) return false;
+      else return true;
+    });
+    let filteredUserLikes = user.likes.filter(likeId => {
+      if (like.equals(likeId)) return false;
+      else return true;
+    });
+
+    article.likes = filteredArticleLikes;
+    user.likes = filteredUserLikes;
+
+    await article.save();
+    await user.save();
+
+    return await Like.findOneAndDelete(like.id);
+  }
 };

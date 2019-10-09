@@ -3,6 +3,9 @@ require("./schemas/likes");
 require("./schemas/articles");
 require("./schemas/authors");
 require("./schemas/readers");
+require("./schemas/contentManagers");
+require("./schemas/appTemplates/mainPage");
+require("./schemas/appTemplates/categoryPages");
 
 const keys = require("../keys/dev");
 const mongoose = require("mongoose");

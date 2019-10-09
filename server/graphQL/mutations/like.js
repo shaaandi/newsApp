@@ -3,7 +3,7 @@ const { LikeType } = require("../schemas/rootQuery");
 
 const { GraphQLInputObjectType, GraphQLID, GraphQLNonNull } = graphql;
 
-const { likeArticle } = require("../../dbResources/like");
+const { likeArticle, unLikeArticle } = require("../../dbResources/like");
 
 const likeArticleInputType = new GraphQLInputObjectType({
   name: "likeArticleInputType",

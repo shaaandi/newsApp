@@ -1,14 +1,15 @@
 const express = require("express");
 const app = express();
+//  MongoDB configuration .
 require("./mongoDB/index");
+//  *******************
+
 const expressGraphQL = require("express-graphql");
 const schema = require("./graphQL/schema");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
 const keys = require("./keys");
-//  MongoDB configuration .
 
-//  *******************
 app.get("/", (req, res) => {
   res.send("I am wokring ");
 });
