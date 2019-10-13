@@ -8,11 +8,15 @@ const Article = mongoose.model("articles");
 const authorSchema = new mongoose.Schema(
   {
     //  We will add the fName, lName,  mName , functionality later
-    name: String,
+    // name
+
+    // ****
     username: {
       type: String,
       unique: true
     },
+
+    // references
     articles: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -45,10 +49,23 @@ const authorSchema = new mongoose.Schema(
     googleId: {
       type: String,
       default: null
-    }
+    },
 
     // ******************
     //  We will add the personal data later, and other fuctionality later
+    fName: String,
+    lName: String,
+    // Image are stored in links type, in version 3 we ,will use the amazon S3 to save files
+    //  and many other data, including files and videos;
+    profileImg: String,
+    phoneNumber: String,
+    email: String,
+    address: {
+      city: String,
+      street: String,
+      country: String
+    }
+    // Education and other fields can be added later ;
   },
   { timestamps: true }
 );

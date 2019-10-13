@@ -7,7 +7,6 @@ const Like = mongoose.model("likes");
 const readerSchema = new mongoose.Schema(
   {
     //  We will add the fName, lName,  mName , functionality later
-    name: String,
     username: {
       type: String,
       unique: true
@@ -38,10 +37,22 @@ const readerSchema = new mongoose.Schema(
     googleId: {
       type: String,
       default: null
-    }
+    },
 
     //  ***************
     // WE WILL ADD THE VIEW FUNCTIONALITY LATER ;
+    fName: String,
+    lName: String,
+    // Image are stored in links type, in version 3 we ,will use the amazon S3 to save files
+    //  and many other data, including files and videos;
+    profileImg: String,
+    phoneNumber: String,
+    email: String,
+    address: {
+      city: String,
+      street: String,
+      country: String
+    }
   },
   { timestamps: true }
 );

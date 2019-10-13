@@ -6,7 +6,7 @@ const articleSchema = new mongoose.Schema(
   {
     title: String,
     // later scaling will include the multiple images in the content and links facility,
-    content: String,
+    content: [String],
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "authors"

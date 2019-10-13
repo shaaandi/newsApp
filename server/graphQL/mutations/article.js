@@ -20,7 +20,8 @@ const createArticleInputType = new GraphQLInputObjectType({
   fields: {
     title: { type: new GraphQLNonNull(GraphQLString) },
     content: { type: new GraphQLNonNull(GraphQLString) },
-    category: { type: new GraphQLNonNull(GraphQLString) }
+    category: { type: new GraphQLNonNull(GraphQLString) },
+    createdAt: { type: GraphQLString }
   }
 });
 

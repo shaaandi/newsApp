@@ -6,6 +6,7 @@ const likeSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "readers"
     },
+    // generally we are faking readers to like articles , author will not like in fake data;
     authorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "authors"
