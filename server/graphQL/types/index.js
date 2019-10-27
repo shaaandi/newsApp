@@ -5,46 +5,14 @@ const Article = mongoose.model("articles");
 const Reader = mongoose.model("readers");
 const Author = mongoose.model("authors");
 const Like = mongoose.model("likes");
-const MainPage = mongoose.model("mainPage");
-const CategoryPage = mongoose.model("categoryPages");
 
 const {
   GraphQLObjectType,
   GraphQLID,
   GraphQLString,
   GraphQLList,
-  GraphQLBoolean,
-  GraphQLInputObjectType,
-  GraphQLNonNull,
-  GraphQLEnumType
+  GraphQLBoolean
 } = graphql;
-
-//  Enum types defintiion  :
-
-const fetchCategoryNameEnum = new GraphQLEnumType({
-  name: "fetchCategoryNameEnum",
-  values: {
-    International: { value: "International" },
-    US: { value: "US" },
-    Politics: { value: "Politics" },
-    Health: { value: "Health" },
-    Technology: { value: "Technology" },
-    Sports: { value: "Sports" },
-    Opinion: { value: "Opinion" }
-  }
-});
-
-//  *********************
-
-// Input Types :
-const fetchCategoryTempleteInputType = new GraphQLInputObjectType({
-  name: "fetchCategoryTempleteInputType",
-  fields: {
-    name: { type: new GraphQLNonNull(fetchCategoryNameEnum) }
-  }
-});
-
-//  ***********
 
 //  Demo Query Files
 
@@ -53,7 +21,9 @@ const ArticleType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
-    content: { type: GraphQLString },
+    content: {
+      type: new GraphQLList(GraphQLString)
+    },
     authorId: {
       type: AuthorType,
       resolve(parentVal, args, req) {
@@ -80,6 +50,15 @@ const ArticleType = new GraphQLObjectType({
   })
 });
 
+const AddressType = new GraphQLObjectType({
+  name: "AdressType",
+  fields: {
+    city: { type: GraphQLString },
+    street: { type: GraphQLString },
+    country: { type: GraphQLString }
+  }
+});
+
 const AuthorType = new GraphQLObjectType({
   name: "AuthorType",
   fields: () => ({
@@ -87,8 +66,22 @@ const AuthorType = new GraphQLObjectType({
     googleId: { type: GraphQLString },
     badge: { type: GraphQLString },
     initialized: { type: GraphQLBoolean },
-    name: { type: GraphQLString },
     username: { type: GraphQLString },
+    profileImg: { type: GraphQLString },
+    // about section ;
+    fName: { type: GraphQLString },
+    lName: { type: GraphQLString },
+    // Image are stored in links type, in version 3 we ,will use the amazon S3 to save files
+    //  and many other data, including files and videos;
+    profileImg: { type: GraphQLString },
+    phoneNumber: { type: GraphQLString },
+    email: { type: GraphQLString },
+    address: {
+      type: AddressType
+    },
+
+    // end about section
+
     articles: {
       // adding article type in the GraphQLList function
       type: new GraphQLList(ArticleType),
@@ -120,6 +113,7 @@ const CommentType = new GraphQLObjectType({
       type: ReaderType,
       resolve(parentVal, args, req) {
         //  resolving the query by polulating the reader
+        return Reader.findById(parentVal.readerId);
       }
     },
     content: {
@@ -130,6 +124,7 @@ const CommentType = new GraphQLObjectType({
       resolve(parentVal, args, req) {
         //  resolving the request by popluating the article,
         //  or by findiny the article
+        return Article.findById(parentVal.articleId);
       }
     },
     createdAt: {
@@ -184,6 +179,7 @@ const ReaderType = new GraphQLObjectType({
     initialized: { type: GraphQLBoolean },
     name: { type: GraphQLString },
     username: { type: GraphQLString },
+    profileImg: { type: GraphQLString },
     likes: {
       type: new GraphQLList(LikeType),
       resolve(parentVal, args, req) {
@@ -298,79 +294,7 @@ const CategoryPageType = new GraphQLObjectType({
 
 // **********************
 
-const RootQueryType = new GraphQLObjectType({
-  name: "RootQueryType",
-  fields: () => ({
-    currentUser: {
-      type: CurrentUserType,
-      resolve(parentVal, args, req) {
-        return req.user;
-      }
-    },
-    reader: {
-      type: ReaderType,
-      args: {
-        id: { type: GraphQLID }
-      },
-      resolve(parentVal, args, req) {
-        // finding the correct reader and returning it.
-        return Reader.get(args.id);
-      }
-    },
-    author: {
-      type: AuthorType,
-      args: {
-        id: { type: GraphQLID }
-      },
-      resolve(parentVal, args, req) {
-        //  resolving the author query
-        return Author.get(args.id);
-      }
-    },
-
-    article: {
-      type: ArticleType,
-      args: {
-        id: { type: GraphQLID }
-      },
-      resolve(parentVal, args, req) {
-        //  finding the correct the article.
-        return Article.get(args.id);
-      }
-    },
-    comment: {
-      type: CommentType,
-      args: {
-        id: { type: GraphQLID }
-      },
-      resolve(parentVal, args, req) {
-        //  finding the comment
-      }
-    },
-
-    // seperate queries section for the run time of the browser ,
-    // including fetching the templetes;
-    fetchMainTemplete: {
-      type: MainPageType,
-      resolve(parentVal, args, req) {
-        return MainPage.findOne({});
-      }
-    },
-    fetchCategoryTemplete: {
-      type: CategoryPageType,
-      args: {
-        input: { type: fetchCategoryTempleteInputType }
-      },
-      resolve(parentVal, { input }, req) {
-        return CategoryPage.findOne({ name: input.name });
-      }
-    }
-    // *******************************************
-  })
-});
-
 module.exports = {
-  RootQueryType,
   CurrentUserType,
   ArticleType,
   ReaderType,

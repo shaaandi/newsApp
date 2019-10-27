@@ -49,7 +49,8 @@ const articleSchema = new mongoose.Schema(
 
 articleSchema.statics.get = async function(id) {
   let article = await this.findById(id);
-  return article;
+  return article
+  
 };
 
 articleSchema.statics.getAuthor = async function(id) {
@@ -60,7 +61,8 @@ articleSchema.statics.getAuthor = async function(id) {
 articleSchema.statics.getComments = async function(id) {
   let comments = await Comment.find({ articleId: id })
     .populate("authorId")
-    .populate("readerId");
+    .populate("readerId")
+    .sort('-createdAt')
   return comments;
 };
 

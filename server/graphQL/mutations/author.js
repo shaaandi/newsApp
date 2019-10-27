@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { AuthorType } = require("../schemas/rootQuery");
+const { AuthorType } = require("../types");
 const {
   GraphQLString,
   GraphQLNonNull,

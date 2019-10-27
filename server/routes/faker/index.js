@@ -359,12 +359,8 @@ module.exports = app => {
   });
 
   app.get("/fake/query", async (req, res) => {
-    let articles = await Article.find({
-      createdAt: {
-        $gte: new Date("2019-10-1")
-      }
-    }).select("comments");
-    res.send(articles);
+    let article = await  Article.findById('5da1e9d3f5e2f30b4c52abae');
+    res.send(article)
 
     // let author = await Author.findById("5da1d59ecfa99e286cdfbcad");
     // let updatedArticles = author.articles.filter(article => {

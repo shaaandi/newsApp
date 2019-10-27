@@ -9,23 +9,57 @@ module.exports = {
   likeArticle: async ({ articleId }, req) => {
     let userId = req.user.badge.toLowerCase().concat("Id");
     let article = await Article.findById(articleId);
+    let user;
+    if(userId == 'readerId'){
+      user = await Reader.findById(req.user.id);
+    }
+    else {
+      user = await Author.findById(req.user.id)
+    }
     //  checking that user can't like the same article again ;
     let alreadyLiked = await Like.find({ [userId]: req.user.id, articleId });
 
     if (alreadyLiked.length > 0) {
-      return false;
+      // here we can unlike the article;
+      // removing the like and removing all the references from article and user
+      // so if there is already liked, then the already liked have one element in it
+      let foundLike = alreadyLiked[0];
+      // removing user likes
+      let userLikes = user.likes.filter(likeId => {
+        if(foundLike.equals(likeId)){
+          return false
+        } else {
+          return true
+        }
+      });
+      let articleLikes = article.likes.filter(likeId => {
+        if(foundLike.equals(likeId)){
+          return false
+        } else {
+          return true
+        }
+
+      })
+      user.likes = userLikes;
+      article.likes = articleLikes;
+      // saving the user and article, and removing the like . --deleteFoundLike
+      await Like.findByIdAndDelete(foundLike.id);
+      await user.save()
+      await article.save()
+      return foundLike
     }
     //  **************************
     const like = await new Like({ articleId, [userId]: req.user.id });
-
-    let userLikes = [...req.user.likes, like.id];
-    req.user.likes = userLikes;
+    console.log(user)
+    console.log(typeof(user.likes))
+    let userLikes = [...user.likes, like.id];
+    user.likes = userLikes;
 
     let articleLikes = [...article.likes, like.id];
     article.likes = articleLikes;
 
     await like.save();
-    await req.user.save();
+    await user.save();
     await article.save();
     return like;
   },

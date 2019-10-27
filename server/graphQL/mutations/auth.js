@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 const { setUserBadge, login, signup } = require("../../dbResources/auth/index");
-const { CurrentUserType } = require("../schemas/rootQuery");
+const { CurrentUserType } = require("../types");
 
 const {
   GraphQLString,

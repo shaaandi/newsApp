@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { ArticleType } = require("../schemas/rootQuery");
+const { ArticleType } = require("../types");
 const {
   GraphQLString,
   GraphQLNonNull,

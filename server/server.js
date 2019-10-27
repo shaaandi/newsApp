@@ -1,5 +1,12 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
+
+const corsOptions = {
+  origin : 'http://localhost:3100',
+  credentials  : true
+}
+app.use(cors(corsOptions));
 //  MongoDB configuration .
 require("./mongoDB/index");
 //  *******************

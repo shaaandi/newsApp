@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const MainPage = mongoose.model("mainPage");
 const CategoryPage = mongoose.model("categoryPages");
 
-const { MainPageType, CategoryPageType } = require("../schemas/rootQuery");
+const { MainPageType, CategoryPageType } = require("../types");
 const {
   setCategorySection,
   setMainSection
@@ -16,6 +16,8 @@ const {
   GraphQLID,
   GraphQLEnumType
 } = graphql;
+
+const { categoryNameEnum } = require("../ENUMS");
 
 const mainSectionEnum = new GraphQLEnumType({
   name: "mainSectionEnum",
@@ -46,24 +48,12 @@ const categorySectionEnum = new GraphQLEnumType({
   }
 });
 
-const categoryNameEnum = new GraphQLEnumType({
-  name: "categoryNameEnum",
-  values: {
-    International: { value: "International" },
-    US: { value: "US" },
-    Politics: { value: "Politics" },
-    Health: { value: "Health" },
-    Technology: { value: "Technology" },
-    Sports: { value: "Sports" },
-    Opinion: { value: "Opinion" }
-  }
-});
-
 const setCategorySectionInputType = new GraphQLInputObjectType({
   name: "setCategorySectionInputType",
   fields: {
     articleId: { type: new GraphQLNonNull(GraphQLID) },
     section: { type: new GraphQLNonNull(categorySectionEnum) },
+    // name: { type: new GraphQLNonNull(categoryNameEnum) }
     name: { type: new GraphQLNonNull(categoryNameEnum) }
   }
 });

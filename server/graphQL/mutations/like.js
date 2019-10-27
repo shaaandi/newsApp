@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { LikeType } = require("../schemas/rootQuery");
+const { LikeType } = require("../types");
 
 const { GraphQLInputObjectType, GraphQLID, GraphQLNonNull } = graphql;
 
@@ -29,6 +29,7 @@ module.exports = {
     },
     resolve(parentVal, { input }, req) {
       //  resolve by using likeArticle func in the dbResources helpers
+      if (!req.user) return false;
 
       return likeArticle(input, req);
     }

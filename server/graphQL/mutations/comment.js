@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { CommentType } = require("../schemas/rootQuery");
+const { CommentType } = require("../types");
 const {
   GraphQLString,
   GraphQLNonNull,
