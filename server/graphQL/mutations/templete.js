@@ -14,7 +14,8 @@ const {
   GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLID,
-  GraphQLEnumType
+  GraphQLEnumType,
+  GraphQLInt
 } = graphql;
 
 const { categoryNameEnum } = require("../ENUMS");
@@ -35,7 +36,8 @@ const setMainSectionInputType = new GraphQLInputObjectType({
   name: "setMainSectionInputType",
   fields: {
     articleId: { type: new GraphQLNonNull(GraphQLID) },
-    section: { type: new GraphQLNonNull(mainSectionEnum) }
+    section: { type: new GraphQLNonNull(mainSectionEnum) },
+    indexInSection: { type: GraphQLInt }
   }
 });
 

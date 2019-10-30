@@ -5,7 +5,7 @@ const { reader } = require("./reader");
 const { article } = require("./article");
 const { currentUser } = require("./auth");
 const { author } = require("./author");
-const { searchArticle } = require("./search");
+const { searchArticles } = require("./search");
 
 const {
   fetchMainTemplete,
@@ -21,7 +21,7 @@ const RootQueryType = new GraphQLObjectType({
     article,
     currentUser,
     author,
-    searchArticle,
+    searchArticles,
     fetchMainTemplete,
     fetchCategoryTemplete,
     fetchCategoryHot,

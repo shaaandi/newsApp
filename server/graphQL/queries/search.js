@@ -4,29 +4,48 @@ const {
   GraphQLEnumType,
   GraphQLInputObjectType,
   GraphQLString,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLInt
 } = graphql;
 
 const { ArticleType } = require("../types");
 
 const { categoryNameEnum } = require("../ENUMS");
 
-const sortEnum = new GraphQLEnumType({
-  name: "sortEnum",
+const { searchArticles } = require("../../dbResources/search");
+
+const sortOrderEnum = new GraphQLEnumType({
+  name: "sortOrderEnum",
   values: {
     Asc: { value: "asc" },
     Desc: { value: "desc" }
   }
 });
 
+const sortFieldEnum = new GraphQLEnumType({
+  name: "sortFieldEnum",
+  values: {
+    likes: { value: "likes" },
+    createdAt: { value: "createdAt" }
+  }
+});
+
+const searchTypeEnum = new GraphQLEnumType({
+  name: "searchTypeEnum",
+  values: {
+    byAuthor: { value: "byAuthor" },
+    byTitle: { value: "byTitle" }
+  }
+});
+
 const searchArticlesSortOpts = new GraphQLInputObjectType({
   name: "searchArticlesSortOpts",
   fields: {
-    createdAt: {
-      type: sortEnum
+    sortField: {
+      type: sortFieldEnum
     },
-    likes: {
-      type: sortEnum
+    sortOrder: {
+      type: sortOrderEnum
     }
   }
 });
@@ -34,17 +53,18 @@ const searchArticlesSortOpts = new GraphQLInputObjectType({
 const searchArticlesInputType = new GraphQLInputObjectType({
   name: "searchArticlesInputType",
   fields: {
-    title: { type: GraphQLString },
-    authorUsername: { type: GraphQLString },
+    query: { type: GraphQLString },
+    searchType: { type: searchTypeEnum },
     sortOpts: { type: searchArticlesSortOpts },
-    category: {
-      type: categoryNameEnum
-    }
+    inCategories: {
+      type: new GraphQLList(categoryNameEnum)
+    },
+    pageNum: { type: new GraphQLNonNull(GraphQLInt) }
   }
 });
 
 module.exports = {
-  searchArticle: {
+  searchArticles: {
     type: new GraphQLList(ArticleType),
     args: {
       input: {
@@ -53,7 +73,7 @@ module.exports = {
     },
     resolve(parentVal, { input }, req) {
       //  use dbResources to find article and return it
-      return;
+      return searchArticles({ input, req });
     }
   }
 };

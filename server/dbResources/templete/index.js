@@ -8,7 +8,7 @@ const CategoryPage = mongoose.model("categoryPages");
 // to provide the templete id too, in the setMainSection mutation
 
 module.exports = {
-  setMainSection: async ({ articleId, section }, req) => {
+  setMainSection: async ({ articleId, section, indexInSection }, req) => {
     // setting the section of the mainPage with the provided article
     // and returning the section ;
     // see notes to find out why we are using findOne with no arguments;
@@ -16,7 +16,21 @@ module.exports = {
     switch (section) {
       // handling array ref types first
       case "editorsPick":
-        mainPage[section].push(articleId);
+        // it its ref Section then , the indexInSection is also being provided
+        // mainPage[section].push(articleId);
+        // checking if the index is more than length than set it to length;
+
+        if (indexInSection < mainPage[section].length) {
+          let updatedSection = [];
+          updatedSection = mainPage[section].map((article, index) => {
+            if (index === indexInSection) return articleId;
+            else return article;
+          });
+          mainPage[section] = updatedSection;
+        } else {
+          mainPage[section].push(articleId);
+        }
+
         break;
       default:
         mainPage[section] = articleId;
