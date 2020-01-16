@@ -12,7 +12,7 @@ const mongoose = require("mongoose");
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI,  { useNewUrlParser: true } );
 
 mongoose.connection
   .once("open", () => console.log("Connected to MongoDB Instance"))

@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require('cors');
 const app = express();
+const keys = require('./keys/index');
 
 const corsOptions = {
-  origin : 'http://localhost:3100',
+  origin : keys.frontendURL,
   credentials  : true
 }
 app.use(cors(corsOptions));
@@ -15,7 +16,6 @@ const expressGraphQL = require("express-graphql");
 const schema = require("./graphQL/schema");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
-const keys = require("./keys");
 
 app.get("/", (req, res) => {
   res.send("I am wokring ");
