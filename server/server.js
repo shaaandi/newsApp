@@ -11,6 +11,7 @@ app.use(cors(corsOptions));
 //  MongoDB configuration .
 require("./mongoDB/index");
 //  *******************
+// its testing
 
 const expressGraphQL = require("express-graphql");
 const schema = require("./graphQL/schema");
