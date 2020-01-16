@@ -37,7 +37,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require("./routes/auth/index")(app);
-require("./routes/faker/fakerRoute")(app);
+if (process.env.NODE_ENV !== 'production') require("./routes/faker/fakerRoute")(app);
+
 
 // ***************
 app.use(
