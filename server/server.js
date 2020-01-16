@@ -3,6 +3,8 @@ const cors = require('cors');
 const app = express();
 const keys = require('./keys/index');
 
+console.log(keys)
+
 const corsOptions = {
   origin : keys.frontendURL,
   credentials  : true
