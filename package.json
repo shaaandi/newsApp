@@ -22,7 +22,7 @@
     "cookie-session": "^1.3.3",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "express-graphql": "^0.9.0",
     "graphql": "^14.5.8",
     "materialize-css": "^1.0.0-rc.2",
